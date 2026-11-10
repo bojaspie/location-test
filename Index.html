@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Location permission test</title>
+
+<h1>Location permission test</h1>
+<p>This page only checks location if you press the button and allow the browser prompt.</p>
+<button id="check">Check my location</button>
+<p id="result" aria-live="polite"></p>
+
+<script>
+  document.querySelector("#check").addEventListener("click", () => {
+    const result = document.querySelector("#result");
+
+    if (!navigator.geolocation) {
+      result.textContent = "This browser does not provide location access.";
+      return;
+    }
+
+    result.textContent = "Waiting for permission…";
+
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        result.textContent =
+          `Your browser reported: latitude ${coords.latitude}, ` +
+          `longitude ${coords.longitude} (accuracy about ${Math.round(coords.accuracy)} metres).`;
+      },
+      error => {
+        result.textContent = "Location wasn’t shared: " + error.message;
+      }
+    );
+  });
+</script>
+</html>
